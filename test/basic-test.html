@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <!-- Component to be tested. -->
+    <link rel="import" href="../moment-formatter.html">
+    <link rel="import" href="../moment-between.html">
+  </head>
+  <body>
+
+    <test-fixture id="MomentFormatterFixture">
+      <template>
+        <moment-formatter></moment-formatter>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('moment-formatter', function() {
+        var elMain;
+        setup(function() {
+          elMain    = fixture('MomentFormatterFixture');
+        });
+
+        test('keeps its initial value', function() {
+          assert.equal(elMain.value, '1234567.89');
+        });
+        test('changes in real time', function() {
+          elMain.value  = '9876543.21';
+          assert.equal(elMain.formatted, '$9.9m');
+        });
+
+        test('has the correct formatted result', function() {
+          assert.equal(elMain.formatted, '$1.2m');
+        });
+        test('has the correct prefix', function() {
+          assert.equal(elMain.$.prefix.innerHTML, '$')
+        });
+        test('has the correct midfix', function() {
+          assert.equal(elMain.$.midfix.innerHTML, '1.2')
+        });
+        test('has the correct suffix', function() {
+          assert.equal(elMain.$.suffix.innerHTML, 'm')
+        });
+      });
+    </script>
+
+  </body>
+</html>

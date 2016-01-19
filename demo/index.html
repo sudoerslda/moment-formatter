@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>moment-formatter Demo</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <link rel="import" href="../moment-formatter.html">
+    <link rel="import" href="../moment-between.html">
+  </head>
+  <body unresolved>
+    <template is="dom-bind">
+      <div>
+        <moment-formatter
+          value="1982/01/18 18:29:00"
+          input-format="YYYY/MM/DD HH:mm:ss"
+          output-format="l"
+          mode="fromNow">
+        </moment-formatter>
+
+        <moment-between
+          from="2016/01/17 15:29:00"
+          from-format="YYYY/MM/DD HH:mm:ss"
+          to="2016/01/18 18:29:00"
+          to-format="YYYY/MM/DD HH:mm:ss">
+        </moment-between>
+      </div>
+    </template>
+  </body>
+</html>

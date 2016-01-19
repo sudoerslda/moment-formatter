@@ -1,0 +1,173 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="moment-imports.html">
+
+<!--
+An element allowing to easily display nicelly formatted dates.
+
+Examples:
+
+    <moment-formatter
+      value="2016/01/18 17:14:00"
+      input-format="YYYY/MM/DD HH:mm:ss"
+      output-format="lll"
+      mode="fromNow"
+    ></moment-formatter>
+
+Different modes can be used:
+
+- `"format"` allows to specify an output format to be used along with the input
+  value. Please refer to the [MomentJS documentation](http://momentjs.com/docs/#/parsing/string-format/).
+- `"calendar"` allows to display a human readable string (Eg "Yesterday at 10AM"). When using this mode,
+  the `format` property is discarded. Please refer to
+    [this MomentJS section](http://momentjs.com/docs/#/displaying/calendar-time/) for more information.
+- `"fromNow"` displays the data as a relative time since now. For more informations, please refer
+  to [this MomentJS section](http://momentjs.com/docs/#/displaying/fromnow/).
+
+When using the `"fromNow"` mode, an internal updating system will occur. The refresh rate of this
+system is based on the time ellapsed since the `value` property.
+
+@demo demo/index.html
+-->
+<dom-module id="moment-formatter">
+  <template>
+    <style>
+      :host {
+        display:    block;
+        box-sizing: border-box;
+      }
+    </style>
+    <span id="result"></span>
+  </template>
+
+  <script>
+    (function() {
+      Polymer({
+        is:         'moment-formatter',
+        properties:   {
+          /**
+           * Allows to switch between the following modes:
+           * - `'fromNow'` alows relative display. It ignores the `outputFormat` property.
+           * - `'calendar'`: displays a nicelly formated date.
+           * - `'format'`: allows to use a custom format.
+           */
+          mode:         {
+            type:         String,
+            value:        'format',
+            observer:     '_modeChanged'
+          },
+          /**
+           * As the passed property `value` is a string, `inputFormat` is used
+           * to determine how to unserialize it to a compatible date object.
+           */
+          inputFormat:  {
+            type:         String,
+            value:        'YYYY/MM/DD HH:mm:ss'
+          },
+          /**
+           * When the element is in `format` mode, this property is used to
+           * format the output string.
+           */
+          outputFormat: {
+            type:         String,
+            value:        'YYYY/MM/DD HH:mm:ss'
+          },
+          /**
+           * The value to be formatted. The following types are supported:
+           * - `String`: the `inputFormat` property will be used as well.
+           * - `Number`: the value is considered as an unix timestamp.
+           * - `Date`: the value is used as it is.
+           */
+          value:        Object,
+
+          /**
+           * This property caches the formater when either one of the `value` or
+           * `inputFormat` properties change.
+           */
+          formatter:    {
+            type:         Object,
+            computed:     '_computeFormatter(inputFormat, value)'
+          },
+          /**
+           * Whenever `outputFormat` is set to `fromNow`, this internal property
+           * will change regularily to ensure that the output is updated. Logic
+           * regarding updates is as follow:
+           * - Every second if `value` is less than a minute away.
+           * - Every minute if `value` is less than an hour away,
+           * - Every five minutes if `value` is more than an hour away.
+           */
+          tick:         {
+            type:         Number,
+            readOnly:     true,
+            value:        Math.random()
+          },
+          /**
+           * The final output string based on all input properties.
+           */
+          formatted:    {
+            type:         String,
+            computed:     '_computeFormatted(formatter, mode, tick, outputFormat)'
+          }
+        },
+
+        observers:    [ '_render(formatted)' ],
+
+        /**
+         * Called whenever `mode` changes. In charge of maintaining async operations
+         * in the event of the mode being `"fromNow"`.
+         */
+        _modeChanged: function(mode) {
+          if (mode=='fromNow' && !this._repeater) {
+            var ticker = (function() {
+              this._setTick   (Math.random());
+              this._repeater  = this.async(ticker, this._tickInterval());
+            }).bind(this);
+            this._repeater  = this.async(ticker, this._tickInterval());
+          }
+          else if (mode!='fromNow' && this._repeater) {
+            this.cancelAsync  (this._repeater);
+            this._repeater    = null;
+          }
+        },
+
+        /**
+         * Recomputes the `formatter` property whenever the `inputFormat` or the
+         * `value` properties change.
+         */
+        _computeFormatter: function(format, value) {
+          if ((value instanceof Date) || (typeof value === 'number'))
+            return moment(value);
+          else
+            return moment(value, format);
+        },
+        /**
+         * In charge of computing the final `formatted` property, whenever the
+         * `formatter`, `mode`, `tick` or `outputFormat` changes.
+         */
+        _computeFormatted: function(formatter, mode, tick, outputFormat) {
+          return mode=='format' ? formatter[mode](outputFormat) : formatter[mode]();
+        },
+        /**
+         * Whenever the `formatted` property changes, `_render` is in charge of
+         * refreshing displayed DOM text.
+         */
+        _render: function(formatted) {
+          this.$.result.innerText = formatted;
+        },
+
+        /**
+         * Helper method, see the `tick` property documentation.
+         */
+        _tickInterval: function() {
+          var diff = moment().diff(this.formatter, 'minutes');
+          if (diff < 1)       return 1000;
+          else if (diff < 60) return 60000;
+          else                return 300000;
+        },
+
+        ready: function() {
+          this.value = this.value || Date.now();
+        }
+      });
+    })();
+  </script>
+</dom-module>
