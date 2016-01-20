@@ -81,11 +81,19 @@ system is based on the time ellapsed since the `value` property.
           },
 
           /**
+           * The locale to be used.
+           */
+          locale:       {
+            type:         String,
+            value:        'en-ie'
+          },
+
+          /**
            * The final output string based on all input properties.
            */
           formatted:    {
             type:         String,
-            computed:     '_computeFormatted(startPoint, endPoint)'
+            computed:     '_computeFormatted(locale, startPoint, endPoint)'
           }
         },
 
@@ -102,8 +110,11 @@ system is based on the time ellapsed since the `value` property.
          * In charge of computing the final `formatted` property, whenever the
          * `from`, `fromFormat`, `to` or `toFormat` change.
          */
-        _computeFormatted: function(startPoint, endPoint) {
-          return moment.duration(startPoint.diff(endPoint)).humanize();
+        _computeFormatted: function(locale, startPoint, endPoint) {
+          return moment
+                  .duration(startPoint.diff(endPoint))
+                  .locale(locale)
+                  .humanize();
         },
         /**
          * Whenever the `formatted` property changes, `_render` is in charge of

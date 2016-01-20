@@ -80,12 +80,20 @@ system is based on the time ellapsed since the `value` property.
           value:        Object,
 
           /**
+           * The locale to be used.
+           */
+          locale:       {
+            type:         String,
+            value:        'en-ie'
+          },
+
+          /**
            * This property caches the formater when either one of the `value` or
            * `inputFormat` properties change.
            */
           formatter:    {
             type:         Object,
-            computed:     '_computeFormatter(inputFormat, value)'
+            computed:     '_computeFormatter(locale, inputFormat, value)'
           },
           /**
            * Whenever `outputFormat` is set to `fromNow`, this internal property
@@ -133,11 +141,13 @@ system is based on the time ellapsed since the `value` property.
          * Recomputes the `formatter` property whenever the `inputFormat` or the
          * `value` properties change.
          */
-        _computeFormatter: function(format, value) {
+        _computeFormatter: function(locale, format, value) {
+          var ret   = null;
           if ((value instanceof Date) || (typeof value === 'number'))
-            return moment(value);
+            ret   = moment(value);
           else
-            return moment(value, format);
+            ret   = moment(value, format);
+          return ret.locale(locale)
         },
         /**
          * In charge of computing the final `formatted` property, whenever the
