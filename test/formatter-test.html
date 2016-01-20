@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <!-- Component to be tested. -->
+    <link rel="import" href="../moment-formatter.html">
+    <link rel="import" href="../moment-between.html">
+  </head>
+  <body>
+
+    <test-fixture id="MainFixture">
+      <template>
+        <moment-formatter
+          value="1982/02/01 18:29:00"
+          output-format="l"
+          mode="format">
+        </moment-formatter>
+      </template>
+    </test-fixture>
+    <test-fixture id="FormatFixture">
+      <template>
+        <moment-formatter
+          value="1982/02/18 18:29:00"
+          input-format="YYYY/MM/DD HH:mm:ss"
+          output-format="l"
+          mode="format">
+        </moment-formatter>
+      </template>
+    </test-fixture>
+    <test-fixture id="CalendarFixture">
+      <template>
+        <moment-formatter
+          value="1982/02/18 18:29:00"
+          input-format="YYYY/MM/DD HH:mm:ss"
+          mode="calendar">
+        </moment-formatter>
+      </template>
+    </test-fixture>
+    <test-fixture id="FromNowFixture">
+      <template>
+        <moment-formatter
+          value="1982/02/18 18:29:00"
+          input-format="YYYY/MM/DD HH:mm:ss"
+          mode="fromNow">
+        </moment-formatter>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('moment-formatter', function() {
+        var elMain, elFormat, elCalendar, elFromNow;
+        setup(function() {
+          elMain      = fixture('MainFixture');
+          elFormat    = fixture('FormatFixture');
+          elCalendar  = fixture('CalendarFixture'),
+          elFromNow   = fixture('FromNowFixture');
+        });
+
+        test('keeps its initial value', function() {
+          assert.equal(elFormat.value, '1982/02/18 18:29:00');
+        });
+        test('changes in real time', function() {
+          elMain.value  = '1982/02/18 18:29:00';
+          assert.equal(elMain.formatted, '2/18/1982');
+        });
+
+        test('has a correct output for mode "format"', function() {
+          assert.equal(elFormat.formatted, '2/18/1982');
+        });
+        test('has a correct output for mode "calendar"', function() {
+          assert.equal(elCalendar.formatted, '02/18/1982');
+        });
+        test('has a correct output for mode "fromNow"', function() {
+          assert.equal(elFromNow.formatted, '34 years ago');
+        });
+      });
+    </script>
+
+  </body>
+</html>
