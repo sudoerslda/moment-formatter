@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <!-- Component to be tested. -->
+    <link rel="import" href="../moment-between.html">
+  </head>
+  <body>
+
+    <test-fixture id="MainFixture">
+      <template>
+        <moment-between
+          from="1982/02/18 18:29:00"
+          from-format="YYYY/MM/DD HH:mm:ss"
+          to="2016/01/20 13:38:00"
+          to-format="YYYY/MM/DD HH:mm:ss">
+        </moment-between>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('moment-between', function() {
+        var elMain;
+        setup(function() {
+          elMain      = fixture('MainFixture');
+        });
+
+        test('keeps its initial values', function() {
+          assert.equal(elMain.from, '1982/02/18 18:29:00');
+          assert.equal(elMain.to,   '2016/01/20 13:38:00');
+        });
+        test('changes in real time', function() {
+          elMain.value  = '1982/02/18 18:29:00';
+          assert.equal(elMain.formatted, '34 years');
+        });
+
+        test('renders the formatted value', function() {
+          assert.equal(elMain.$.result.innerText, '34 years')
+        });
+      });
+    </script>
+
+  </body>
+</html>

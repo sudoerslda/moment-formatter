@@ -8,14 +8,14 @@
     <script src="../../web-component-tester/browser.js"></script>
     <!-- Component to be tested. -->
     <link rel="import" href="../moment-formatter.html">
-    <link rel="import" href="../moment-between.html">
   </head>
   <body>
 
     <test-fixture id="MainFixture">
       <template>
         <moment-formatter
-          value="1982/02/01 18:29:00"
+          value="1982/02/18 18:29:00"
+          input-format="YYYY/MM/DD HH:mm:ss"
           output-format="l"
           mode="format">
         </moment-formatter>
@@ -68,13 +68,17 @@
           assert.equal(elMain.formatted, '2/18/1982');
         });
 
-        test('has a correct output for mode "format"', function() {
+        test('renders the formatted value', function() {
+          assert.equal(elMain.$.result.innerText, '2/18/1982')
+        });
+
+        test('has a correct formatted property for mode "format"', function() {
           assert.equal(elFormat.formatted, '2/18/1982');
         });
-        test('has a correct output for mode "calendar"', function() {
+        test('has a correct formatted property for mode "calendar"', function() {
           assert.equal(elCalendar.formatted, '02/18/1982');
         });
-        test('has a correct output for mode "fromNow"', function() {
+        test('has a correct formatted property for mode "fromNow"', function() {
           assert.equal(elFromNow.formatted, '34 years ago');
         });
       });
