@@ -63,9 +63,13 @@
         test('keeps its initial value', function() {
           assert.equal(elFormat.value, '1982/02/18 18:29:00');
         });
-        test('changes in real time', function() {
+        test('has its formatted value change when value changes', function() {
           elMain.value  = '1982/02/18 18:29:00';
           assert.equal(elMain.formatted, '2/18/1982');
+        });
+        test('has its formatted value change when output format changes', function() {
+          elMain.outputFormat = 'YYYY';
+          assert.equal(elMain.formatted, '1982');
         });
 
         test('renders the formatted value', function() {
