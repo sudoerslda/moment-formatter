@@ -10,21 +10,8 @@ Examples:
       from="2016/01/18 17:14:00"
       from-format="YYYY/MM/DD HH:mm:ss"
       to="2016/01/21 11:14:00"
-      to-format="YYYY/MM/DD HH:mm:ss"
-    ></moment-between>
-
-Different modes can be used:
-
-- `"format"` allows to specify an output format to be used along with the input
-  value. Please refer to the [MomentJS documentation](http://momentjs.com/docs/#/parsing/string-format/).
-- `"calendar"` allows to display a human readable string (Eg "Yesterday at 10AM"). When using this mode,
-  the `format` property is discarded. Please refer to
-    [this MomentJS section](http://momentjs.com/docs/#/displaying/calendar-time/) for more information.
-- `"fromNow"` displays the data as a relative time since now. For more informations, please refer
-  to [this MomentJS section](http://momentjs.com/docs/#/displaying/fromnow/).
-
-When using the `"fromNow"` mode, an internal updating system will occur. The refresh rate of this
-system is based on the time ellapsed since the `value` property.
+      to-format="YYYY/MM/DD HH:mm:ss">
+    </moment-between>
 
 @demo demo/index.html
 -->
