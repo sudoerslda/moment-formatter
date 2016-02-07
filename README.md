@@ -2,6 +2,9 @@
 
 A molecule wrapper around the [MomentJS](http://momentjs.com/) library.
 
+View docs [here](http://sudoerslda.github.io/moment-formatter/components/moment-formatter/)
+and demo [here](http://sudoerslda.github.io/moment-formatter/components/moment-formatter/demo/).
+
 
 ## Dependencies
 
